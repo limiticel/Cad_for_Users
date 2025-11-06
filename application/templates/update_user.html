@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Update Page</h2>
+    <form action="/update_user/{{ user.id }}" method="POST">
+        <input type="text" name="name" placeholder="Full Name" value="{{ user.name }}" required>
+        <input type="text" name="username" placeholder="Username" value="{{ user.username }}" required>
+        <input type="text" name="email" placeholder="Email" value="{{ user.email }}" required>
+        <input type="text" name="birthdate" placeholder="Birthdate" value="{{ user.birthdate }}" required>
+        <input type="text" name="job_title" placeholder="Job Title" value="{{ user.job_title }}" required>
+        <input type="text" name="favorite_music_genre_1" placeholder="Favorite Music Genre 1" value="{{ user.favorite_music_genre_1 }}" required>
+        <input type="text" name="favorite_music_genre_2" placeholder="Favorite Music Genre 2" value="{{ user.favorite_music_genre_2 }}" required>
+        <input type="text" name="favorite_music_genre_3" placeholder="Favorite Music Genre 3" value="{{ user.favorite_music_genre_3 }}" required>
+        <input type="text" name="numberphone" placeholder="Number Phone" value="{{ user.numberphone }}" required>
+        <input type="text" name="cpf" placeholder="CPF" value="{{ user.cpf }}" readonly>
+        <input type="text" name="address" placeholder="Address" value="{{ user.address }}" required>   
+        <button type="submit">Update User</button>
+    </form>
+    </body>
+</html>
