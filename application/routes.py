@@ -88,3 +88,21 @@ def init_routes(app):
             return jsonify({"error": "User not found"}), 404
 
         return render_template("update_user.html", user=selected_user)# vai lá pro system agora, go to system now,
+
+    @app.route("/api", methods=["GET"])
+    def api_route():
+        api = APIHandler()
+        users_list = api.auxiliary_method()
+        return jsonify(users_list)
+    
+
+    @app.route("/api/user/<int:user_id>", methods=["GET"])
+    def api_user_route(user_id):
+        api = APIHandler()
+        users_list = api.auxiliary_method()
+        selected_user = next((user for user in users_list if user["id"] == user_id), None)
+
+        if not selected_user:
+            return jsonify({"error": "User not found"}), 404
+
+        return jsonify(selected_user)
