@@ -1,5 +1,6 @@
-from flask import json, jsonify, render_template, redirect , request
+from flask import json, jsonify, render_template, redirect , request, flash
 from werkzeug.security import generate_password_hash, check_password_hash
+from application.loggingHandlers import loggingHandler
 from .handlers import APIHandler, DatabaseHandler
 import json
 
@@ -11,11 +12,12 @@ import json
 def init_routes(app):
     @app.route('/')# Rota principal, simples e direta, Main route, simple and straightforward
     def index():
-    
+        
         return render_template("index.html")
     
     @app.route("/singnin", methods=["POST","GET"])# provavelmente vou mudar o nome disso, I will probably change the name of this
     def singnin():
+        log = loggingHandler()
         if request.method == 'POST': # Se for um POST, processa o formulário, If it's a POST, process the form
             data = { # não preciso explicar isso, I don't need to explain this
                 "name": request.form.get("name"),
@@ -31,8 +33,12 @@ def init_routes(app):
                 "cpf": request.form.get("cpf"),
                 "address": request.form.get("address"),
             }
-            api = APIHandler() # Instancia o handler da API, classe lá do Handlers, lembra? , Instantiates the API handler, the class from Handlers, remember?
-            api.create_user_api(**data)# la no handlers você verá como deve ser a estrutura do data, there in handlers you will see how the structure of data should be
+            try:
+                api = APIHandler() # Instancia o handler da API, classe lá do Handlers, lembra? , Instantiates the API handler, the class from Handlers, remember?
+                api.create_user_api(**data)# la no handlers você verá como deve ser a estrutura do data, there in handlers you will see how the structure of data should be
+            except Exception as e:
+                log.get_logger("teste").error(f"Error creating user: {e}")
+       
         return render_template("singnin.html")
 
     @app.route("/admin", methods=["GET"])
@@ -47,6 +53,7 @@ def init_routes(app):
     @app.route("/update_user/<int:user_id>", methods=["GET", "POST"])
     def update_user(user_id):# o nome já diz tudo, The name says it all
         api = APIHandler()# voce ja esta cansado de saber o que isso faz, You are already tired of knowing what this does
+        log = loggingHandler()
 
         if request.method == "POST":
             updated_data = { # nem vou explicar isso, I won't even explain this
@@ -62,8 +69,16 @@ def init_routes(app):
                 "cpf": request.form.get("cpf"),
                 "address": request.form.get("address"),
             }
-            api.update_user_api(user_id, **updated_data)
-            return redirect("/admin")  # redireciona após atualizar
+            try: 
+                api.update_user_api(user_id, **updated_data)
+                flash("User updated successfully!", "success")
+                return redirect("/admin")
+            except Exception as e:
+                flash("Error updating user.", "danger")
+                log.get_logger("teste").error(f"Error updating user: {e}")
+                return render_template("update_user.html", user=updated_data)
+            
+             
 
         # Se for GET, mostra a página de edição
         user_list = api.auxiliary_method()

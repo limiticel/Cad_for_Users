@@ -11,6 +11,7 @@ password = quote_plus("12345678")#
 
 def create_app():
     app = Flask(__name__)
+    app.secret_key = 'supersecretkey'  # Necessário para flash messages
 
     # app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+mysqlconnector://Cad_for_users:{password}@localhost/usersdb'
 

@@ -3,10 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Update User</title>
 </head>
 <body>
     <h2>Update Page</h2>
+
+    <!-- 🔹 Bloco de mensagens Flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul>
+            {% for category, message in messages %}
+                <li>{{ message }}</li>
+                
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
     <form action="/update_user/{{ user.id }}" method="POST">
         <input type="text" name="name" placeholder="Full Name" value="{{ user.name }}" required>
         <input type="text" name="username" placeholder="Username" value="{{ user.username }}" required>
@@ -21,5 +34,5 @@
         <input type="text" name="address" placeholder="Address" value="{{ user.address }}" required>   
         <button type="submit">Update User</button>
     </form>
-    </body>
+</body>
 </html>
